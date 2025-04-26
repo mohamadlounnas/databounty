@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DATABOUNTY | AI & Security Competition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="matrix-animation">
+    <!-- Matrix code rain effect -->
+    <div id="matrix-container"></div>
+    
+    <div class="cyber-page-indicator" id="page-indicator"></div>
+    
+    <!-- Animated Background -->
+    <div class="background-container">
+        <div class="grid-background"></div>
+        <div class="particles" id="particles"></div>
+        <div class="cybersecurity-symbols">
+            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-lock"></i>
+            <i class="fas fa-key"></i>
+            <i class="fas fa-server"></i>
+        </div>
+        <div class="ai-symbols">
+            <i class="fas fa-robot"></i>
+            <i class="fas fa-brain"></i>
+            <i class="fas fa-microchip"></i>
+            <i class="fas fa-code"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1 class="glitch-text" data-text="DATABOUNTY">DATABOUNTY</h1>
+                <p class="subtitle typing-indicator">AI & Security Competition Leaderboard</p>
+            </div>
+        </header>
+        
+        <div class="segments cyber-card">
+            <button class="segment-btn active" data-tab="final">
+                <i class="fas fa-trophy"></i> Final Score
+            </button>
+            <button class="segment-btn" data-tab="ai">
+                <i class="fas fa-brain"></i> AI
+            </button>
+            <button class="segment-btn" data-tab="security">
+                <i class="fas fa-shield-alt"></i> Security
+            </button>
+        </div>
+        
+        <main>
+            <div class="cyber-card scan-highlight matrix-animation">
+                <div class="cyber-card-header">
+                    <div class="cyber-section-title">Team Rankings</div>
+                    <div class="cyber-badge security-badge mono">SECURE</div>
+                </div>
+                
+                <div class="leaderboard-container">
+                    <div class="top-teams">
+                        <!-- SVG Circuit Background Pattern -->
+                        <div class="circuit-background">
+                            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="100" height="100" patternTransform="scale(0.5)">
+                                        <path d="M10 10h80v80H10z" fill="none" stroke="rgba(0, 255, 242, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M30 30h40v40H30z" fill="none" stroke="rgba(0, 255, 242, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M0 50h100M50 0v100" stroke="rgba(0, 255, 242, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(0, 255, 242, 0.15)" stroke-width="0.5"/>
+                                        <circle cx="50" cy="50" r="5" fill="none" stroke="rgba(0, 255, 242, 0.25)" stroke-width="0.5"/>
+                                        <circle cx="10" cy="10" r="2" fill="rgba(0, 255, 242, 0.25)"/>
+                                        <circle cx="90" cy="10" r="2" fill="rgba(0, 255, 242, 0.25)"/>
+                                        <circle cx="10" cy="90" r="2" fill="rgba(0, 255, 242, 0.25)"/>
+                                        <circle cx="90" cy="90" r="2" fill="rgba(0, 255, 242, 0.25)"/>
+                                    </pattern>
+                                    <pattern id="circuitPatternGold" patternUnits="userSpaceOnUse" width="100" height="100" patternTransform="scale(0.5)">
+                                        <path d="M10 10h80v80H10z" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M30 30h40v40H30z" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M0 50h100M50 0v100" stroke="rgba(255, 215, 0, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="0.5"/>
+                                        <circle cx="50" cy="50" r="5" fill="none" stroke="rgba(255, 215, 0, 0.25)" stroke-width="0.5"/>
+                                        <circle cx="10" cy="10" r="2" fill="rgba(255, 215, 0, 0.25)"/>
+                                        <circle cx="90" cy="10" r="2" fill="rgba(255, 215, 0, 0.25)"/>
+                                        <circle cx="10" cy="90" r="2" fill="rgba(255, 215, 0, 0.25)"/>
+                                        <circle cx="90" cy="90" r="2" fill="rgba(255, 215, 0, 0.25)"/>
+                                    </pattern>
+                                    <pattern id="circuitPatternRed" patternUnits="userSpaceOnUse" width="100" height="100" patternTransform="scale(0.5)">
+                                        <path d="M10 10h80v80H10z" fill="none" stroke="rgba(255, 23, 68, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M30 30h40v40H30z" fill="none" stroke="rgba(255, 23, 68, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <path d="M0 50h100M50 0v100" stroke="rgba(255, 23, 68, 0.15)" stroke-width="0.5" stroke-dasharray="1,3" stroke-linecap="round"/>
+                                        <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255, 23, 68, 0.15)" stroke-width="0.5"/>
+                                        <circle cx="50" cy="50" r="5" fill="none" stroke="rgba(255, 23, 68, 0.25)" stroke-width="0.5"/>
+                                        <circle cx="10" cy="10" r="2" fill="rgba(255, 23, 68, 0.25)"/>
+                                        <circle cx="90" cy="10" r="2" fill="rgba(255, 23, 68, 0.25)"/>
+                                        <circle cx="10" cy="90" r="2" fill="rgba(255, 23, 68, 0.25)"/>
+                                        <circle cx="90" cy="90" r="2" fill="rgba(255, 23, 68, 0.25)"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#circuitPattern)" />
+                            </svg>
+                        </div>
+                        
+                        <div class="top-team second-place">
+                            <div class="position">2</div>
+                            <div class="team-avatar">
+                                <i class="fas fa-robot"></i>
+                                <span class="data-ring"></span>
+                            </div>
+                            <div class="team-name mono"></div>
+                            <div class="team-score"></div>
+                            <div class="data-line data-line-left"></div>
+                            <div class="data-node top-left"></div>
+                            <div class="data-node top-right"></div>
+                            <div class="data-node bottom-left"></div>
+                            <div class="data-node bottom-right"></div>
+                        </div>
+                        <div class="top-team first-place">
+                            <div class="position">1</div>
+                            <div class="team-avatar">
+                                <i class="fas fa-crown"></i>
+                                <span class="data-ring"></span>
+                            </div>
+                            <div class="team-name mono"></div>
+                            <div class="team-score"></div>
+                            <div class="data-line data-line-left"></div>
+                            <div class="data-line data-line-right"></div>
+                            <div class="data-node top-left"></div>
+                            <div class="data-node top-right"></div>
+                            <div class="data-node bottom-left"></div>
+                            <div class="data-node bottom-right"></div>
+                        </div>
+                        <div class="top-team third-place">
+                            <div class="position">3</div>
+                            <div class="team-avatar">
+                                <i class="fas fa-shield-alt"></i>
+                                <span class="data-ring"></span>
+                            </div>
+                            <div class="team-name mono"></div>
+                            <div class="team-score"></div>
+                            <div class="data-line data-line-right"></div>
+                            <div class="data-node top-left"></div>
+                            <div class="data-node top-right"></div>
+                            <div class="data-node bottom-left"></div>
+                            <div class="data-node bottom-right"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-list" id="team-list">
+                        <!-- Teams will be populated here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cyber-card security-alert mt-8">
+                <div class="cyber-card-header">
+                    <div class="cyber-section-title">Competition Protocol</div>
+                    <div class="cyber-badge info-badge mono">ACTIVE</div>
+                </div>
+                <div class="p-6">
+                    <p class="mb-4 text-gray-300">
+                        This competition measures team performance across AI and security challenges. Teams are ranked based on their cumulative scores in both domains.
+                    </p>
+                    <ul class="cyber-step-list mb-6">
+                        <li>Complete AI challenges to increase your team's AI score</li>
+                        <li>Solve security puzzles to improve your security ranking</li>
+                        <li>Final score is calculated based on performance in both categories</li>
+                        <li>All scores are verified through secure cryptographic protocols</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p class="mono">&copy; 2023 DATABOUNTY::<span class="neon-text">SECURE</span>. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Particle library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
