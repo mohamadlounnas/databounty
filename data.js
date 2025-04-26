@@ -112,8 +112,8 @@ const teamsData = [
         id: "brooties",
         name: "Brooties",
         aiScore: 88.654,
-        securityScore: 0,
-        finalScore: (88.654 * 0.65) + (0 * 0.35)
+        securityScore: 20*0.35,
+        finalScore: (88.654 * 0.65) + (20 * 0.35)
     },
     {
         id: "soissontdis",
