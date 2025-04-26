@@ -14,9 +14,16 @@
 const segmentButtons = document.querySelectorAll('.segment-btn');
 const teamListContainer = document.getElementById('team-list');
 const topTeams = document.querySelectorAll('.top-team');
+let teamDetailDialog;
+let dialogCloseBtn;
+let dialogConfirmBtn;
+let dialogMinimizeBtn;
+let dialogMaximizeBtn;
+let toggleNamesBtn;
 
 // Current active tab/leaderboard
 let activeTab = 'final';
+let namesHidden = false;
 
 /**
  * Initialize Matrix code rain animation
@@ -431,6 +438,256 @@ function createTeamListItem(team, rank) {
 }
 
 /**
+ * Shows team detail dialog for the selected team
+ * @param {Object} team - Team data object 
+ * @param {number} rank - Team's current rank
+ */
+function showTeamDetailDialog(team, rank) {
+    // Get DOM elements
+    const teamNameElement = document.getElementById('dialogTeamName');
+    const teamIdElement = document.getElementById('dialogTeamId');
+    const teamAiScoreElement = document.getElementById('dialogAiScore');
+    const teamSecurityScoreElement = document.getElementById('dialogSecurityScore');
+    const teamTotalScoreElement = document.getElementById('dialogTotalScore');
+    const teamRankElement = document.getElementById('dialogTeamRank');
+    const performanceRatingElement = document.getElementById('performanceRating');
+    const performanceAnalysisElement = document.getElementById('performanceAnalysis');
+    const aiScoreBar = document.getElementById('aiScoreBar');
+    const securityScoreBar = document.getElementById('securityScoreBar');
+    const totalScoreBar = document.getElementById('totalScoreBar');
+    const dialogWindow = document.querySelector('.cyber-dialog-window');
+    
+    // Set team data
+    teamNameElement.textContent = team.name;
+    teamIdElement.textContent = `ID: ${team.id}`;
+    teamAiScoreElement.textContent = team.aiScore.toFixed(1);
+    teamSecurityScoreElement.textContent = team.securityScore.toFixed(1);
+    teamTotalScoreElement.textContent = team.finalScore.toFixed(1);
+    teamRankElement.textContent = `#${rank}`;
+    
+    // Reset progress bars
+    aiScoreBar.style.width = '0%';
+    securityScoreBar.style.width = '0%';
+    totalScoreBar.style.width = '0%';
+    
+    // Determine performance rating based on score
+    let rating = '';
+    let ratingBg = '';
+    
+    if (team.finalScore >= 40) {
+        rating = 'S-TIER';
+        ratingBg = 'linear-gradient(90deg, #ff8a00, #ff0080)';
+    } else if (team.finalScore >= 30) {
+        rating = 'A-TIER';
+        ratingBg = 'linear-gradient(90deg, #ffca00, #ff6b00)';
+    } else if (team.finalScore >= 20) {
+        rating = 'B-TIER';
+        ratingBg = 'linear-gradient(90deg, #00ffa3, #00c8ff)';
+    } else if (team.finalScore >= 10) {
+        rating = 'C-TIER';
+        ratingBg = 'linear-gradient(90deg, #0099ff, #0033ff)';
+    } else if (team.finalScore >= 5) {
+        rating = 'D-TIER';
+        ratingBg = 'linear-gradient(90deg, #8c8c8c, #4a4a4a)';
+    } else {
+        rating = 'E-TIER';
+        ratingBg = 'linear-gradient(90deg, #666, #333)';
+    }
+    
+    performanceRatingElement.textContent = rating;
+    performanceRatingElement.style.background = ratingBg;
+    
+    // Generate and set performance analysis
+    performanceAnalysisElement.innerHTML = generateTeamAnalysis(team, rank);
+    
+    // Show dialog
+    teamDetailDialog.classList.add('open');
+    
+    // Play sound effect
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-notification-wave-alarm-987.mp3');
+    audio.volume = 0.3;
+    audio.play().catch(e => console.log('Audio play failed:', e));
+    
+    // Add scan line effect to dialog window
+    addScanLine(dialogWindow);
+    
+    // Animate score bars after a delay
+    setTimeout(() => {
+        const maxScore = 100; // Maximum possible score is 100
+        const aiScorePercent = (team.aiScore / maxScore) * 100;
+        const securityScorePercent = (team.securityScore / maxScore) * 100;
+        const totalScorePercent = (team.finalScore / maxScore) * 100;
+        
+        aiScoreBar.style.transition = 'width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+        securityScoreBar.style.transition = 'width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+        totalScoreBar.style.transition = 'width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+        
+        aiScoreBar.style.width = `${aiScorePercent}%`;
+        
+        setTimeout(() => {
+            securityScoreBar.style.width = `${securityScorePercent}%`;
+            
+            setTimeout(() => {
+                totalScoreBar.style.width = `${totalScorePercent}%`;
+                // Add scan line after total score bar completes
+                addScanLine(document.querySelector('.cyber-dialog-content'));
+            }, 200);
+        }, 200);
+    }, 600);
+}
+
+/**
+ * Generates a detailed analysis of team performance
+ * @param {Object} team - Team data object
+ * @param {number} rank - Team's current rank
+ * @returns {string} HTML formatted analysis
+ */
+function generateTeamAnalysis(team, rank) {
+    const aiScore = team.aiScore;
+    const securityScore = team.securityScore;
+    const totalScore = team.finalScore;
+    
+    let analysis = '';
+    
+    // Add intro sentence based on rank
+    if (rank <= 3) {
+        analysis += `Team <span>${team.name}</span> is a top performer, currently ranked <span>#${rank}</span> overall. `;
+    } else if (rank <= 10) {
+        analysis += `Team <span>${team.name}</span> is showing strong potential, currently ranked <span>#${rank}</span>. `;
+    } else {
+        analysis += `Team <span>${team.name}</span> is currently ranked <span>#${rank}</span> and has room for improvement. `;
+    }
+    
+    // Analyze AI score
+    if (aiScore >= 80) {
+        analysis += `The team demonstrates exceptional AI proficiency with a score of <span>${aiScore.toFixed(1)}</span>. `;
+    } else if (aiScore >= 50) {
+        analysis += `Their AI capabilities are solid with a score of <span>${aiScore.toFixed(1)}</span>. `;
+    } else if (aiScore >= 20) {
+        analysis += `AI performance is developing with a score of <span>${aiScore.toFixed(1)}</span>. `;
+    } else {
+        analysis += `AI score of <span>${aiScore.toFixed(1)}</span> indicates this is an area for growth. `;
+    }
+    
+    // Analyze security score
+    if (securityScore >= 35) {
+        analysis += `Security expertise is outstanding with a score of <span>${securityScore.toFixed(1)}</span>. `;
+    } else if (securityScore >= 20) {
+        analysis += `Security capabilities are good with a score of <span>${securityScore.toFixed(1)}</span>. `;
+    } else if (securityScore >= 10) {
+        analysis += `Security performance is moderate with a score of <span>${securityScore.toFixed(1)}</span>. `;
+    } else {
+        analysis += `Security score of <span>${securityScore.toFixed(1)}</span> suggests need for improvement. `;
+    }
+    
+    // Add conclusion and recommendation
+    if (aiScore > securityScore * 2) {
+        analysis += `The team shows significantly stronger AI skills compared to security. Focusing on security challenges could improve overall ranking.`;
+    } else if (securityScore > aiScore * 2) {
+        analysis += `The team demonstrates much stronger security capabilities than AI. Improving AI performance would enhance overall standing.`;
+    } else {
+        analysis += `The team has a balanced skill set across both domains. Continued improvement in both areas will help maintain competitive standing.`;
+    }
+    
+    return analysis;
+}
+
+/**
+ * Closes the team detail dialog with animation
+ */
+function closeTeamDetailDialog() {
+    // Add glitch effect before closing
+    const dialogWindow = document.querySelector('.cyber-dialog-window');
+    dialogWindow.classList.add('glitch-effect');
+    
+    // Play close sound
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-tech-click-1140.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(e => console.log('Audio play failed:', e));
+    
+    // Add final scan line before closing
+    addScanLine(dialogWindow);
+    
+    // Wait for glitch animation to complete before closing
+    setTimeout(() => {
+        teamDetailDialog.classList.remove('open');
+        dialogWindow.classList.remove('glitch-effect');
+    }, 500);
+}
+
+/**
+ * Simulates minimizing the dialog
+ */
+function minimizeTeamDetailDialog() {
+    const dialogWindow = document.querySelector('.cyber-dialog-window');
+    dialogWindow.classList.add('glitch-effect');
+    
+    // Play minimize sound
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-futuristic-click-1118.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(e => console.log('Audio play failed:', e));
+    
+    // Simulate minimize animation
+    dialogWindow.style.transform = 'scale(0.01) translateY(100vh)';
+    dialogWindow.style.opacity = '0';
+    
+    setTimeout(() => {
+        dialogWindow.style.transform = '';
+        dialogWindow.style.opacity = '';
+        dialogWindow.classList.remove('glitch-effect');
+        teamDetailDialog.classList.remove('open');
+    }, 500);
+}
+
+/**
+ * Simulates maximizing the dialog with a glitch effect
+ */
+function maximizeTeamDetailDialog() {
+    const dialogWindow = document.querySelector('.cyber-dialog-window');
+    
+    // Play maximize sound
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-futuristic-sci-fi-computer-notification-3125.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(e => console.log('Audio play failed:', e));
+    
+    // Add glitch effect
+    dialogWindow.classList.add('glitch-effect');
+    
+    // Add scan line
+    addScanLine(dialogWindow);
+    
+    // Simulate maximize by slightly increasing size then returning to normal
+    dialogWindow.style.transform = 'scale(1.05)';
+    
+    setTimeout(() => {
+        dialogWindow.style.transform = '';
+        dialogWindow.classList.remove('glitch-effect');
+        
+        // Add another scan line after maximizing
+        setTimeout(() => {
+            addScanLine(dialogWindow);
+        }, 300);
+    }, 500);
+}
+
+/**
+ * Add scan line for cyber effect
+ * @param {Element} element - Element to add scan line to
+ */
+function addScanLine(element) {
+    const scanLine = document.createElement('div');
+    scanLine.className = 'scan-line';
+    element.appendChild(scanLine);
+    
+    // Remove the scan line after the animation completes
+    setTimeout(() => {
+        if (scanLine && scanLine.parentNode) {
+            scanLine.parentNode.removeChild(scanLine);
+        }
+    }, 2000); // Match the animation duration (2s)
+}
+
+/**
  * Populates the team list with all teams (excluding top 3)
  * @param {Array} teams - Sorted array of team objects
  */
@@ -448,7 +705,7 @@ function populateTeamList(teams) {
     });
     
     // Add click event listeners to team items for additional interaction
-    document.querySelectorAll('.team-item').forEach(item => {
+    document.querySelectorAll('.team-item').forEach((item, index) => {
         item.addEventListener('click', () => {
             // Play "data" sound effect
             playDataTransmissionSound();
@@ -458,6 +715,13 @@ function populateTeamList(teams) {
             
             // Trigger glitch effect
             glitchEffect(item);
+            
+            // Show team detail dialog
+            const teamId = item.dataset.teamId;
+            const team = teamsData.find(t => String(t.id) === teamId);
+            if (team) {
+                showTeamDetailDialog(team, index + 4); // +4 for rank
+            }
         });
     });
 }
@@ -542,15 +806,45 @@ function matrixConsoleGreeting() {
     console.log('%c> AUTHENTICATION VERIFIED. DISPLAYING TEAM RANKINGS...', styles);
 }
 
-// Add event listeners to tab buttons
-segmentButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        switchTab(button.dataset.tab);
+/**
+ * Toggles visibility of team names
+ */
+function toggleTeamNames() {
+    namesHidden = !namesHidden;
+    document.body.classList.toggle('names-hidden', namesHidden);
+    toggleNamesBtn.classList.toggle('active', namesHidden);
+    
+    // Update button icon and text
+    const icon = toggleNamesBtn.querySelector('i');
+    icon.className = namesHidden ? 'fas fa-eye' : 'fas fa-eye-slash';
+    toggleNamesBtn.innerHTML = `${icon.outerHTML} ${namesHidden ? 'Show Names' : 'Hide Names'}`;
+    
+    // Play effect
+    playDataTransmissionSound();
+    
+    // Add glitch effect to all team names
+    document.querySelectorAll('.team-name, .team-title').forEach(el => {
+        glitchEffect(el);
     });
-});
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize DOM elements that need to be loaded first
+    teamDetailDialog = document.getElementById('team-detail-dialog');
+    dialogCloseBtn = teamDetailDialog.querySelector('.cyber-dialog-btn.close');
+    dialogConfirmBtn = teamDetailDialog.querySelector('.cyber-button.confirm');
+    dialogMinimizeBtn = teamDetailDialog.querySelector('.cyber-dialog-btn.minimize');
+    dialogMaximizeBtn = teamDetailDialog.querySelector('.cyber-dialog-btn.maximize');
+    toggleNamesBtn = document.getElementById('toggleNames');
+
+    // Add event listeners to dialog buttons
+    dialogCloseBtn.addEventListener('click', closeTeamDetailDialog);
+    dialogConfirmBtn.addEventListener('click', closeTeamDetailDialog);
+    dialogMinimizeBtn.addEventListener('click', minimizeTeamDetailDialog);
+    dialogMaximizeBtn.addEventListener('click', maximizeTeamDetailDialog);
+    toggleNamesBtn.addEventListener('click', toggleTeamNames);
+
     // Initialize matrix code rain
     initMatrixCodeRain();
     
@@ -590,5 +884,26 @@ document.addEventListener('DOMContentLoaded', () => {
         team.addEventListener('mouseleave', () => {
             team.style.transform = '';
         });
+    });
+    
+    // Add event listeners to top teams for dialog display
+    topTeams.forEach((teamEl, index) => {
+        teamEl.addEventListener('click', () => {
+            // Get current sorted teams
+            const sortedTeams = sortTeams(activeTab);
+            const team = sortedTeams[index];
+            
+            if (team) {
+                showTeamDetailDialog(team, index + 1); // +1 for rank (1-indexed)
+                playPowerUpSound();
+            }
+        });
+    });
+});
+
+// Add event listeners to tab buttons
+segmentButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        switchTab(button.dataset.tab);
     });
 }); 
